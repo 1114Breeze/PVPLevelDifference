@@ -1,0 +1,7 @@
+name: PVPLevelDifference
+version: 1.0
+main: Main
+commands:
+  pld:
+    usage: /pld reload
+    aliases: [pld]
