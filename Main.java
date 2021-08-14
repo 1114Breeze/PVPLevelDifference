@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.List;
 
 import static java.lang.Math.abs;
 
@@ -21,6 +22,8 @@ public class Main extends JavaPlugin implements Listener {
         System.out.println("攻击等级差插件已启动");
         this.saveDefaultConfig();
         this.reloadConfig();
+        this.getConfig().options().copyDefaults();
+        this.saveConfig();
         this.getCommand("pld").setExecutor((CommandExecutor)this);
         getServer().getPluginManager().registerEvents(this, this);
     }
@@ -63,12 +66,16 @@ public class Main extends JavaPlugin implements Listener {
         else {
             Player player1 = (Player)level.getDamager();
             Player player2= (Player)level.getEntity();
-            int level2= player2.getLevel();
-            int level1 = player1.getLevel();
-            int level3 = abs(level1-level2);
-            if (level3>this.getConfig().getInt("Level")){
-                player1.sendMessage("§c你的等级与被攻击者的等级相差超过"+this.getConfig().getInt("Level")+"级，无法互相伤害");
-                level.setCancelled(true);
+            List<String> world = this.getConfig().getStringList("world");
+            String worldname = player1.getWorld().getName();
+            if (world.contains(worldname)&&!(player1.hasPermission("pld.damage"))){
+                int level2= player2.getLevel();
+                int level1 = player1.getLevel();
+                int level3 = abs(level1-level2);
+                if (level3>this.getConfig().getInt("Level")){
+                    player1.sendMessage("§c你的等级与被攻击者的等级相差超过"+this.getConfig().getInt("Level")+"级，无法互相伤害");
+                    level.setCancelled(true);
+                }
             }
         }
     }
