@@ -1,1 +1,6 @@
 Level: 500
+#开启攻击差的世界
+world:
+  - example
+  - example1
+  - world
